@@ -460,19 +460,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Alumno\\.nuget\\packages\\": {}
+    "C:\\Users\\Marcelo\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Alumno\\Desktop\\TP4\\tl2-tp4-2023-MarceAbr\\tl2-tp4-2023-MarceAbr.csproj",
+      "projectUniqueName": "C:\\Users\\Marcelo\\Desktop\\PU\\Segundo Semestre\\Taller 2\\tl2-tp4-2023-MarceAbr\\tl2-tp4-2023-MarceAbr.csproj",
       "projectName": "tl2-tp4-2023-MarceAbr",
-      "projectPath": "C:\\Users\\Alumno\\Desktop\\TP4\\tl2-tp4-2023-MarceAbr\\tl2-tp4-2023-MarceAbr.csproj",
-      "packagesPath": "C:\\Users\\Alumno\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Alumno\\Desktop\\TP4\\tl2-tp4-2023-MarceAbr\\obj\\",
+      "projectPath": "C:\\Users\\Marcelo\\Desktop\\PU\\Segundo Semestre\\Taller 2\\tl2-tp4-2023-MarceAbr\\tl2-tp4-2023-MarceAbr.csproj",
+      "packagesPath": "C:\\Users\\Marcelo\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Marcelo\\Desktop\\PU\\Segundo Semestre\\Taller 2\\tl2-tp4-2023-MarceAbr\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\Alumno\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Marcelo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -480,6 +485,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "C:\\Program Files\\dotnet\\sdk\\7.0.302\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
