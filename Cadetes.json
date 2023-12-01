@@ -1,0 +1,20 @@
+[
+    {
+        "ID": 1,
+        "Nombre": "Marcelo",
+        "Direccion": "Av. Roca",
+        "Telefono": "3863548798"
+    },
+    {
+        "ID": 2,
+        "Nombre": "Braian",
+        "Direccion": "Saenz Pena",
+        "Telefono": "3816598787"
+    },
+    {
+        "ID": 3,
+        "Nombre": "Abregu",
+        "Direccion": "Libertaros",
+        "Telefono": "3863457852"
+    }
+]

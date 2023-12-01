@@ -2,37 +2,42 @@ namespace tl2_tp4_2023_MarceAbr.Models
 {
     public class Cadeteria
     {
-        private string nombre;
-        private string telefono;
-        private List<Pedido> listaPedidosCadeteria = new List<Pedido>(); 
-        private List<Cadete> listaDeCadetes;
+        private string? nombre;
+        private string? telefono;
+        private List<Pedido>? listaPedidosCadeteria; 
+        private List<Cadete>? listaDeCadetes;
+        private AccesoADatosCadetes? accesoCadetes;
+        private AccesoADatosPedidos? accesoPedidos;
+
+
+        public Cadeteria(AccesoADatosCadeteria accesoCad, AccesoADatosCadetes accesoCadete, AccesoADatosPedidos accesoPedido)
+        {
+            Cadeteria cad = accesoCad.Obtener();
+            this.nombre = cad.nombre;
+            this.telefono = cad.telefono;
+            accesoCadetes = accesoCadete;
+            accesoPedidos = accesoPedido;
+            listaDeCadetes = accesoCadetes.Obtener();
+            listaPedidosCadeteria = accesoPedidos.Obtener();
+        }
+        public Cadeteria()
+        {
+            
+        }
+        
+        public Cadeteria(string nomb, string tel){
+            this.nombre = nomb;
+            this.telefono = tel;
+            listaDeCadetes = new List<Cadete>();
+            listaPedidosCadeteria = new List<Pedido>();
+        }
 
         public string Nombre { get => nombre; set => nombre = value;}
         public string Telefono { get => telefono; set => telefono = value;}
-        public List<Cadete> ListaDeCadetes { get => listaDeCadetes; set => listaDeCadetes = value;}
-        public List<Pedido> ListaPedidosCadeteria { get => listaPedidosCadeteria; set => listaPedidosCadeteria = value;}
 
-
-        //Singleton
-        private static Cadeteria? instancia;
-
-        public static Cadeteria getInstancia()
-        {   
-            if (instancia == null)
-            {
-                AccesoADatos datos = new AccesoADatos();
-                string? direc = "Cadetes";
-                datos = new AccesoCSV();
-                datos.cargarCadetes(direc);
-                instancia = new Cadeteria("Bajonazo", "3863548752", datos.ListaCadetes);
-            }
-            return instancia;
-        }
-
-        public Cadeteria(string nomb, string tel, List<Cadete> listCadete){
-            this.nombre = nomb;
-            this.telefono = tel;
-            this.listaDeCadetes = listCadete;
+        public string getNombreCadeteria()
+        {
+            return this.nombre;
         }
 
         public List<Pedido> getPedidos()
@@ -40,26 +45,24 @@ namespace tl2_tp4_2023_MarceAbr.Models
             return this.listaPedidosCadeteria;
         }
 
+        public Cadete cargarCadete(Cadete cadete)
+        {
+            this.listaDeCadetes.Add(cadete);
+            return cadete;
+        }
+
         public List<Cadete> getCadetes()
         {
             return this.listaDeCadetes;
         }
 
-        public List<Pedido> agregarPedido(int num, string obs, float precio, string cliente, string direc, string tel, string refencia)
+        public bool agregarPedido(Pedido pedido, int idCadete)
         {
-            Pedido ped = new Pedido(num, obs, precio, cliente, direc, tel, refencia);
-            listaPedidosCadeteria.Add(ped);
-            return listaPedidosCadeteria;
-        }
+            pedido = asignarPedido(pedido, idCadete);
+            listaPedidosCadeteria.Add(pedido);
+            pedido.Nro = listaPedidosCadeteria.Count();
 
-        public bool asignarPedido(int numPedido, int idCadete)
-        {
-            Cadete? cadete = listaDeCadetes.Find(cad => cad.Id == idCadete);
-            Pedido? pedido = listaPedidosCadeteria.Find(ped => ped.Nro == numPedido);
-
-            pedido.Cadete = cadete;
-
-            if (pedido.Cadete != null)
+            if (accesoPedidos.Guardar(listaPedidosCadeteria))
             {
                 return true;
             } else {
@@ -67,25 +70,33 @@ namespace tl2_tp4_2023_MarceAbr.Models
             }
         }
 
-        public bool cambiarEstadoPedido(int numero, int opcion)
+        public Pedido asignarPedido(Pedido pedAsignar, int idCadete)
         {
-            bool valor = false;
-            foreach (var pedido in listaPedidosCadeteria)
+            Cadete? cadete = listaDeCadetes.FirstOrDefault(c => c.ID == idCadete);
+            pedAsignar.Cadete = cadete;
+            accesoPedidos.Guardar(listaPedidosCadeteria);
+
+            return pedAsignar;
+        }
+
+        public Pedido buscarPedido(int id)
+        {
+            Pedido pedido = listaPedidosCadeteria.Find(p => p.Nro == id);
+            return pedido;
+        }
+
+        public bool cambiarEstadoPedido(int id)
+        {
+            Pedido pedido = listaPedidosCadeteria.FirstOrDefault(p => p.Nro == id);
+            bool valor = pedido.cambiarEstado();
+            accesoPedidos.Guardar(listaPedidosCadeteria);
+
+            if (valor)
             {
-                if (pedido.Nro == numero)
-                {
-                    switch(opcion){
-                        case 1:
-                        pedido.Estado="Entregado";
-                        break;
-                        case 2:
-                        pedido.Estado="Cancelado";
-                        break;
-                    }
-                    valor=true;
-                }
+                return true;
+            } else {
+                return false;
             }
-            return(valor);
         } 
 
     }

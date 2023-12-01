@@ -6,18 +6,21 @@ namespace tl2_tp4_2023_MarceAbr;
 [Route("[controller]")]
 public class CadeteriaController : ControllerBase
 {
+    private Cadeteria? cadeteria;
     private readonly ILogger<CadeteriaController > _logger;
-    Cadeteria cadeteria;
     public CadeteriaController(ILogger<CadeteriaController> logger)
     {
         _logger = logger;
-        cadeteria = Cadeteria.getInstancia();
+        AccesoADatosCadeteria accesoCadeteria = new AccesoADatosCadeteria();
+        AccesoADatosCadetes accesoCadete = new AccesoADatosCadetes();
+        AccesoADatosPedidos accesoPedido = new AccesoADatosPedidos();
+        cadeteria = new Cadeteria(accesoCadeteria, accesoCadete, accesoPedido);
     }
 
     [HttpGet("GetCadeteria")]
     public ActionResult<string> GetNombreCadeteria()
     {
-        return cadeteria.Nombre;
+        return Ok(cadeteria.getNombreCadeteria());
     }
 
     [HttpGet("GetPedidos")]
@@ -28,33 +31,45 @@ public class CadeteriaController : ControllerBase
     }
 
     [HttpGet("GetCadetes")]
-    public ActionResult<List<Cadete>> GetCadetes()
+    public ActionResult<IEnumerable<Cadete>> GetCadetes()
     {
-        List<Cadete> cadetes = cadeteria.getCadetes();
+        var cadetes = cadeteria.getCadetes();
         return Ok(cadetes);
     }
 
     [HttpPost("AgregarPedido")]
-    public ActionResult<string> AgregarPedido(int numPed, string obs, float precio, string cliente, string direc,string tel, string refencia)
+    public ActionResult<Pedido> AgregarPedido(Pedido nuevoPedido, int idCadete)
     {
-        return Ok(cadeteria.agregarPedido(numPed, obs, precio, cliente, direc, tel, refencia));
-    }
-
-    [HttpPut("CambiarEstado")]
-    public ActionResult CambiarEstadoPedido(int idPedido,int newEstado)
-    {
-         return Ok(cadeteria.cambiarEstadoPedido(idPedido,newEstado));
-    }
-
-    [HttpPut("AsignarPedido")]
-    public ActionResult<string> AsignarPedido(int idPedido,int idCadete)
-    {
-        if (cadeteria.ListaDeCadetes!=null)
+        bool valor = cadeteria.agregarPedido(nuevoPedido, idCadete);
+        if (valor)
         {
-            return Ok(cadeteria.asignarPedido(idCadete,idPedido));
+            return Ok(nuevoPedido);
         } else {
-            return NotFound("No existen cadetes cargados");
+            return BadRequest(nuevoPedido);
         }
     }
 
+    [HttpPut("AsignarPedido")]
+    public ActionResult<Pedido> asignarPedido(int idPedido, int idCadete)
+    {
+        Pedido pedido = cadeteria.buscarPedido(idPedido);
+        cadeteria.asignarPedido(pedido, idCadete);
+        return Ok(pedido);
+    }
+
+    [HttpPut("CambiarEstadoPedido")]
+    public ActionResult<Pedido> CambiarEstadoPedido(int idPedido)
+    {
+        bool valor = cadeteria.cambiarEstadoPedido(idPedido);
+        Pedido pedido = cadeteria.buscarPedido(idPedido);
+        return Ok(pedido);
+    }
+
+    [HttpPut("CambiarCadetePedido")]
+    public ActionResult<Pedido> CambiarCadeteAPedido(int idPedido, int idCadete)
+    {
+        Pedido pedido = cadeteria.buscarPedido(idPedido);
+        cadeteria.asignarPedido(pedido, idCadete);
+        return Ok(pedido);
+    }
 }
