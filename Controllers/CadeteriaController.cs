@@ -72,4 +72,26 @@ public class CadeteriaController : ControllerBase
         cadeteria.asignarPedido(pedido, idCadete);
         return Ok(pedido);
     }
+
+    [HttpGet("Buscar_Pedido")]
+    public ActionResult<IEnumerable<Pedido>> GetPedido(int id)
+    {
+        Pedido pedido = cadeteria.buscarPedido(id);
+        if (pedido != null){return Ok(pedido);} else {return NotFound();}
+    }
+
+    [HttpGet("Buscar_Cadete")]
+    public ActionResult<IEnumerable<Cadete>> GetCadete(int id)
+    {
+        Cadete cadete = cadeteria.buscarCadete(id);
+        if (cadete != null){return Ok(cadete);} else {return BadRequest();}
+    }
+
+    [HttpPost("AgregarCadete")]
+    public ActionResult<Cadete> AddCadete(Cadete cadete)
+    {
+        bool valor = cadeteria.agregarCadete(cadete);
+        if (valor){return Ok(cadete);} else{return BadRequest();}
+    }
+
 }

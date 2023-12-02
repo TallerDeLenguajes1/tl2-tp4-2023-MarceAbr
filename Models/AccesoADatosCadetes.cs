@@ -11,5 +11,18 @@ namespace tl2_tp4_2023_MarceAbr.Models
             List<Cadete>? listaCad = JsonSerializer.Deserialize<List<Cadete>>(cadeteJSON);
             return listaCad;
         }
+
+        public bool Guardar(List<Cadete> cadetes)
+        {
+            string? cadeteJson = JsonSerializer.Serialize(cadetes);
+            File.WriteAllText("Cadetes.json", cadeteJson);
+
+            if (cadeteJson != null)
+            {
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 }

@@ -81,8 +81,13 @@ namespace tl2_tp4_2023_MarceAbr.Models
 
         public Pedido buscarPedido(int id)
         {
-            Pedido pedido = listaPedidosCadeteria.Find(p => p.Nro == id);
-            return pedido;
+            Pedido? pedido = listaPedidosCadeteria.FirstOrDefault(p => p.Nro == id);
+            if (pedido != null)
+            {
+                return pedido;
+            } else {
+                return null;
+            }
         }
 
         public bool cambiarEstadoPedido(int id)
@@ -99,5 +104,24 @@ namespace tl2_tp4_2023_MarceAbr.Models
             }
         } 
 
+        public Cadete buscarCadete(int id)
+        {
+            Cadete? cadete = listaDeCadetes.FirstOrDefault(c => c.ID == id);
+            if (cadete != null)
+            {
+                return cadete;
+            } else {
+                return null;
+            }
+        }
+
+        public bool agregarCadete(Cadete cad)
+        {
+            listaDeCadetes.Add(cad);
+            cad.ID = listaDeCadetes.Count();
+            bool valor = accesoCadetes.Guardar(listaDeCadetes);
+
+            if (valor) { return true; } else { return false;}
+        }
     }
 }
